@@ -132,6 +132,7 @@ function upsert(kind, row) {
   return row;
 }
 
+
 // Delete row with given id of given entity kind.
 // Returns true if row with id is found, false otherwise.
 function del(kind, id) {

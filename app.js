@@ -76,10 +76,10 @@ var LIST_FIELDS = {
 };
 
 // GET /api/lists Get all lists
-listApiRouter.get('/', function(req, resp, next) {
+listApiRouter.get('/', function(req, resp, next) { 
   var result = storage.getAll('list');
   if (result) {
-    resp.json({ rows: result });
+    resp.render('index',{ rows: result, nextPos: result.length });
   } else {
     resp.status(404).end();
   }
@@ -89,7 +89,7 @@ listApiRouter.get('/', function(req, resp, next) {
 listApiRouter.get('/:id', function(req, resp, next) {
     var result = storage.getOne('list', parseInt(req.params.id));
     if (result) {
-      resp.json(result);
+      resp.render(result);
     } else {
       resp.status(404).end();
     }
@@ -99,11 +99,13 @@ listApiRouter.get('/:id', function(req, resp, next) {
 listApiRouter.post('/', function(req, resp, next) {
   var fields = getFields(LIST_FIELDS, req.body);
   fields.pos = parseInt(fields.pos);
+  fields.cards = JSON.parse(fields.cards);
   if (! isValid(LIST_FIELDS, fields)) {
     resp.status(400).end();
   } else {
     console.log('Create list', fields);
-    resp.json(storage.upsert('list', fields));
+    storage.upsert('list',fields)
+    resp.redirect('/api/lists')
   }
 });
 
@@ -111,11 +113,14 @@ listApiRouter.post('/', function(req, resp, next) {
 listApiRouter.post('/:id', function(req, resp, next) {
   var fields = getFields(LIST_FIELDS, req.body);
   fields.pos = parseInt(fields.pos);
+  fields.cards = JSON.parse(fields.cards);
+  fields.id = parseInt(req.params.id)
   if (! isValid(LIST_FIELDS, fields)) {
     resp.status(400).end();
   } else {
     console.log('Update list', fields);
-    resp.json(storage.upsert('list', fields));
+    storage.upsert('list', fields);
+    resp.redirect('/api/lists')
   }
 });
 

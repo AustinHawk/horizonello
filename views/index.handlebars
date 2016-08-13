@@ -1,6 +1,20 @@
-<h1>Your HTML code here</h1>
-
+<h1></h1>
 <h2>Example lists</h2>
-Lists:
+{{#each rows}}
+
+Lists:{{name}}
+{{#each cards}}
+<li>{{this}}</li>
+{{/each}}
+
+{{/each}}
+
+<form method="post">
+	<input type="text" name="name"/>
+	<input type="hidden" name="pos" value="{{nextPos}}"/>
+	<input type="hidden" name="cards" value="[]"/>
+	<input type="submit" name="submit"/>
+</form>
 <ul id="lists">
 </ul>
+
